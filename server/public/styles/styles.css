@@ -18,12 +18,18 @@ body {
     grid-template-columns: repeat(4, 100px);
     grid-template-rows: minmax(120px, auto) repeat(5, 100px);
     margin-right: 5em;
+    margin-left: 5em;
 }
 
 .calculator > button {
+    cursor: pointer;
     font-size: 2rem;
     border: 1px solid black;
     outline: none;
+    background-color: rgba(255,255,255);
+}
+
+.calculator > button:hover {
     background-color: rgba(255,255,255,.75);
 }
 
@@ -31,7 +37,7 @@ body {
     grid-column: span 2;
 }
 
-#output {
+.output {
     grid-column: 1/-1;
     background-color: rgba(0,0,0,.75);
     display: flex;
@@ -41,8 +47,16 @@ body {
     padding: 10px;
     word-wrap: break-word;
     word-break: break-all;
-    color: white;
-    font-size: 2rem;
+}
+
+.output #expression {
+    color: rgba(255,255,255,.75);
+    font-size: 1.5rem;
+}
+
+.output #answer {
+    color: rgba(255,255,255);
+    font-size: 2.5rem;
 }
 
 header {
@@ -60,7 +74,7 @@ header {
   min-height: 100vh;
 }
 
-.container div {
+.container .calculator .history{
   flex: 1;
   padding-bottom: 3em;
 }
@@ -68,7 +82,6 @@ header {
 .history {
     min-height: 100vh;
     margin: 0 auto;
-    
     text-align: center;
 }
 
