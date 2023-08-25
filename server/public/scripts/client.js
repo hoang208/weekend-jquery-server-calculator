@@ -125,6 +125,7 @@ function resetPage() {
     //refresh data to empty array as result of request for delete
     $("#expression").text("0");
     $("#answer").text("0");
+    //Refresh dom to reflect wipe of data
     $.ajax({
       method: 'GET',
       url: '/calculation',
@@ -143,10 +144,13 @@ function resetPage() {
 
   function redoCalculation(event) {
     event.preventDefault();
+    //Grabs expression from table data and sends it to server to do calculations again
     console.log("redo is working")
     let calculationToSend= $(this).find('#history-td').text();
     console.log("Calculated to send:",calculationToSend)
-
+    //Change values of expression to match the redo calculation
+    $("#expression").text(calculationToSend);
+    //Send data for calculation which in response will update DOM
     $.ajax(
         {
             method: 'POST',
