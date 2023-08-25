@@ -12,7 +12,7 @@ const PORT = 5000;
 
 //data
 let calculationList=[
-
+    {expression: "12/6", answer: "2"}
 ];
 
 //get request
@@ -22,7 +22,7 @@ app.get("/calculation", function (req, res) {
 
 
 //post request
-app.post("/inventory", (req, res) => {
+app.post("/calculation", (req, res) => {
     let newCalculation = req.body.calculationToAdd;
 
     console.log("new calculation:", newCalculation);

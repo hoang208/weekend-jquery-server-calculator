@@ -39,7 +39,7 @@ function clearOutput(){
 function getCalculation(){
     $.ajax({
         type: 'GET',
-        url: '/inventory'
+        url: '/calculation'
     }).then(function (res) {
         renderToDOM(res);
     }).catch(
@@ -49,24 +49,29 @@ function getCalculation(){
         }
     );
 };
-end getCalculation()
+// end getCalculation()
 
 function addCalculation(event){
     event.preventDefault();
-    let itemToSend={
-        name: $('#name-input').val(),
-        description: $('#description-input').val()
+
+    function calculation(expression) {
+        return new Function('return ' + expression)();
     }
 
-    $('#name-input').val('');
-    $('#description-input').val('');
+    console.log(calculation($("#expression").text()))
+
+    let calculationToSend={
+        expression: $('#expression').text(),
+        answer: $('#answer').text(calculation($("#expression").text()))
+    }
+
 
     $.ajax(
         {
             method: 'POST',
-            url: '/inventory',
+            url: '/calculation',
             data: {
-                itemToAdd: itemToSend
+                calculationToAdd: calculationToSend
             }
         } 
     ).then((res) => {
@@ -80,19 +85,18 @@ function addCalculation(event){
         }
     );
 };
-end addCalculation
+// end addCalculation
 
-function renderToDOM(items) {
-    $('#item-list').empty();
-    for (let item of items) {
-        $('#item-list').append(`
-            <tr>
-                <td>${item.name}</td>
-                <td>${item.description}</td>
-            <tr>
+function renderToDOM(calculations) {
+    $('#history-list').empty();
+    for (let calculation of calculations) {
+        $('#history-list').append(`
+             <li>
+                ${calculation.expression} = ${calculation.answer}
+            </li>
         `); 
 }
 }
-end renderToDOM
+// end renderToDOM
 
 
