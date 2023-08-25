@@ -42,4 +42,11 @@ app.post("/calculation", (req, res) => {
     res.sendStatus(201);
 });
 
+app.delete('/calculation', (req, res) => {
+    // Reset the data
+    calculationList=[];
+    
+    res.sendStatus(204);
+  })
+
 app.listen(PORT, () => { console.log("listening on port:", PORT); });

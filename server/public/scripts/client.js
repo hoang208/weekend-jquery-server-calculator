@@ -2,11 +2,13 @@ $(document).ready(onReady);
 
 function onReady() {
     console.log("Jquery is working")
+    getCalculation();
     $('.number-btn').on('click',addNumberAndOperator)
     $('.operator-btn').on('click',addNumberAndOperator)
     $('#delete-btn').on('click', deleteOutput)
     $('#clear-btn').on('click', clearOutput)
     $('#equal-btn').on('click', addCalculation);
+    $('#reset-btn').on('click', resetPage)
 }
 
 
@@ -89,9 +91,10 @@ function renderToDOM(calculations) {
     for (let calculation of calculations) {
         $('#answer').text(calculation.answer)
         $('#history-list').append(`
-             <li>
-                ${calculation.expression} = ${calculation.answer}
-            </li>
+             <tr>
+                <td>${calculation.expression} = ${calculation.answer}</td>
+                <td><button class="redo-btn">Calculate</button></td>
+            </tr>
         `); 
         console.log(calculation.answer)
 }
@@ -99,3 +102,34 @@ function renderToDOM(calculations) {
 // end renderToDOM
 
 
+function resetPage() {
+    $.ajax({
+      method: 'DELETE',
+      url: '/calculation',
+    }).then(
+      function (res) {
+        console.log('Reset page');
+        refreshData()
+      }
+    ).catch(
+      function (err) {
+        console.log('Failed to reset page');
+      }
+    )
+  }
+
+  function refreshData() {
+    $.ajax({
+      method: 'GET',
+      url: '/calculation',
+    }).then(
+      function (res) {
+        console.log('Refreshed data');
+        renderToDOM(res);
+      }
+    ).catch(
+      function (err) {
+        console.log('Fail to refresh data');
+      }
+    )
+  }

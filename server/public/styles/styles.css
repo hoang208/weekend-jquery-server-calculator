@@ -17,8 +17,8 @@ body {
     min-height: 100vh;
     grid-template-columns: repeat(4, 100px);
     grid-template-rows: minmax(120px, auto) repeat(5, 100px);
-    margin-right: 5em;
-    margin-left: 5em;
+    margin-right: auto;
+    margin-left: auto;
 }
 
 .calculator > button {
@@ -82,11 +82,91 @@ header {
 
 .history {
     min-height: 100vh;
-    margin: 0 auto;
+    margin: auto;
+    display: flex;
     text-align: center;
+    justify-content: center;
+    align-items: center;
 }
 
-li {
-    font-size: 1.5rem;
+table {
+    width: 100%;
     text-align: left;
-}
+    padding-top: 1rem;
+  }
+  
+  table,
+  th,
+  td {
+    border: solid #3b3b4f;
+    border-collapse: collapse;
+    height: 2em;
+  }
+  
+  th,
+  td {
+    padding: .5em;
+    min-width: 3.5em;
+  }
+  
+  thead{
+    background: rgba(255,255,255);
+    color: black;
+    text-align: center;
+  }
+  
+  tbody tr:nth-child(odd) {
+    background: #FFFFF0;
+    text-align: center;
+  }
+  
+  tbody tr:nth-child(even) {
+    background: #F5F5DC;
+    text-align: center;
+  }
+
+  .history button {
+    display: block;
+    width: 75px;
+    margin: 1em;
+    height: 2em;
+    background-color: rgba(255,255,255,.50);
+    border-color: #3b3b4f;
+    border-radius : 10px;
+  }
+  
+  .history button:hover {
+    background-color: white;
+  }
+
+
+footer {
+    display: flex;
+    height: 3em;
+    background-color: rgba(255,255,255,.75);
+    text-align: center;
+    padding-right: 1em;
+    justify-content: center;
+    align-items: center;
+    background-image: none;
+    background-repeat: repeat;
+    background-attachment: scroll;
+    background-position: 0% 0%;
+    position: fixed;
+    bottom: 0pt;
+    width: 100%;
+  }
+
+  footer button {
+    display: block;
+    width: 75px;
+    margin: 1em;
+    height: 2em;
+    background-color: rgba(255,255,255,.50);
+    border-color: #3b3b4f;
+    border-radius : 10px;
+  }
+
+  footer button:hover {
+    background-color: #F5F5DC;
+  }
