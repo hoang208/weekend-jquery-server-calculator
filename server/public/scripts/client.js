@@ -48,7 +48,7 @@ function getCalculation(){
     }).catch(
         function (err) {
             console.log("Error:",err);
-            alert('Request failed, no item list to retrieve.');
+            alert('Request failed, no data to retrieve.');
         }
     );
 };
@@ -77,7 +77,7 @@ function addCalculation(event){
         }
     ).catch((err) => {
             console.log('Error:', err);
-            alert(`Request failed, because: ${err.responseText}`);
+            alert(`Request failed because of invalid expression. Please enter a valid expression that can be correctly calculated.`);
         }
     );
 };
