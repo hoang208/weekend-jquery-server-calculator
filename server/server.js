@@ -20,13 +20,14 @@ function calculation(expression) {
 
 //get request
 app.get("/calculation", function (req, res) {
+    //send data to client.js
     res.send(calculationList);
 })
 
 
 //post request
 app.post("/calculation", (req, res) => {
-    //Grab text in expression
+    //Grab text in expression from client.js
     let newCalculation = req.body.calculationToAdd;
 
     //Calculate answer of expression using calculation function

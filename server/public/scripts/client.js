@@ -43,6 +43,7 @@ function clearOutput(){
 //end clearOutput
 
 function getCalculation(){
+    //receives data from server
     $.ajax({
         type: 'GET',
         url: '/calculation'
@@ -125,7 +126,7 @@ function resetPage() {
     //refresh data to empty array as result of request for delete
     $("#expression").text("0");
     $("#answer").text("0");
-    //Refresh dom to reflect wipe of data
+    //Receives data from server (empty data) and reflects on DOM
     $.ajax({
       method: 'GET',
       url: '/calculation',
@@ -150,7 +151,7 @@ function resetPage() {
     console.log("Calculated to send:",calculationToSend)
     //Change values of expression to match the redo calculation
     $("#expression").text(calculationToSend);
-    //Send data for calculation which in response will update DOM
+    //Send data for calculation which in response will get data back and update DOM
     $.ajax(
         {
             method: 'POST',
