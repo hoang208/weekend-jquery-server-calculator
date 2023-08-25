@@ -13,6 +13,11 @@ const PORT = 5000;
 //data
 let calculationList=[];
 
+//calculation function
+function calculation(expression) {
+    return new Function('return ' + expression)();
+}
+
 //get request
 app.get("/calculation", function (req, res) {
     res.send(calculationList);
@@ -24,10 +29,7 @@ app.post("/calculation", (req, res) => {
     //Grab text in expression
     let newCalculation = req.body.calculationToAdd;
 
-    //Calculate answer of expression
-    function calculation(expression) {
-        return new Function('return ' + expression)();
-    }
+    //Calculate answer of expression using calculation function
     let answerCalculated= calculation(newCalculation)
 
     //Create new object that contains expression and answer
