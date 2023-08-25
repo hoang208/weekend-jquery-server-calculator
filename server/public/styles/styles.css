@@ -116,12 +116,12 @@ table {
   }
   
   tbody tr:nth-child(odd) {
-    background: #FFFFF0;
+    background: rgba(255,255,255,.75);
     text-align: center;
   }
   
   tbody tr:nth-child(even) {
-    background: #F5F5DC;
+    background: rgba(255,255,255);
     text-align: center;
   }
 
@@ -136,7 +136,7 @@ table {
   }
   
   .history button:hover {
-    background-color: white;
+    background-color: #F5F5DC;
   }
 
 

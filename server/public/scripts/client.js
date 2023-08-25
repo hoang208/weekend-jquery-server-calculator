@@ -9,6 +9,7 @@ function onReady() {
     $('#clear-btn').on('click', clearOutput)
     $('#equal-btn').on('click', addCalculation);
     $('#reset-btn').on('click', resetPage)
+    $('#history-list').on('click',('#table-row'), redoCalculation)
 }
 
 
@@ -91,8 +92,8 @@ function renderToDOM(calculations) {
     for (let calculation of calculations) {
         $('#answer').text(calculation.answer)
         $('#history-list').append(`
-             <tr>
-                <td>${calculation.expression} = ${calculation.answer}</td>
+             <tr id="table-row">
+                <td><span id="history-td">${calculation.expression}</span> = ${calculation.answer}</td>
                 <td><button class="redo-btn">Calculate</button></td>
             </tr>
         `); 
@@ -103,6 +104,7 @@ function renderToDOM(calculations) {
 
 
 function resetPage() {
+    //request for delete
     $.ajax({
       method: 'DELETE',
       url: '/calculation',
@@ -117,8 +119,12 @@ function resetPage() {
       }
     )
   }
+  //end resetPage
 
   function refreshData() {
+    //refresh data to empty array as result of request for delete
+    $("#expression").text("0");
+    $("#answer").text("0");
     $.ajax({
       method: 'GET',
       url: '/calculation',
@@ -132,4 +138,32 @@ function resetPage() {
         console.log('Fail to refresh data');
       }
     )
-  }
+  };
+  //end refreshData
+
+  function redoCalculation(event) {
+    event.preventDefault();
+    console.log("redo is working")
+    let calculationToSend= $(this).find('#history-td').text();
+    console.log("Calculated to send:",calculationToSend)
+
+    $.ajax(
+        {
+            method: 'POST',
+            url: '/calculation',
+            data: {
+                calculationToAdd: calculationToSend
+            }
+        } 
+    ).then((res) => {
+            console.log('Success', res);
+
+            getCalculation();
+        }
+    ).catch((err) => {
+            console.log('Error:', err);
+            alert(`Request failed because of invalid expression. Please enter a valid expression that can be correctly calculated.`);
+        }
+    );
+  };
+  //end redoCalculation
