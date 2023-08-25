@@ -1,16 +1,17 @@
 $(document).ready(onReady);
 
 function onReady() {
-    getCalculation();
+    console.log("Jquery is working")
     $('.number-btn').on('click',addNumberAndOperator)
     $('.operator-btn').on('click',addNumberAndOperator)
     $('#delete-btn').on('click', deleteOutput)
     $('#clear-btn').on('click', clearOutput)
-    $('#equal-button').on('click', addCalculation);
+    $('#equal-btn').on('click', addCalculation);
 }
 
 
 function addNumberAndOperator(){
+    //Adds the value of the button to the expression based on conditions
     if ($("#expression").text() == 0) {
         $("#expression").text($(this).text());
     } else {
@@ -21,6 +22,7 @@ function addNumberAndOperator(){
 //end addNumberAndOperator
 
 function deleteOutput(){
+    //Deletes last character in the expression string
     let output= $("#expression").text();
     if (!(parseInt(parseFloat(output)) == 0 && output.length === 1)) {
         $("#expression").text(output.slice(0, output.length-1))
@@ -31,6 +33,7 @@ function deleteOutput(){
 //end deleteOutput
 
 function clearOutput(){
+    //Clears output
     $("#expression").text("0");
     $("#answer").text("0");
 }
@@ -54,18 +57,11 @@ function getCalculation(){
 function addCalculation(event){
     event.preventDefault();
 
-    function calculation(expression) {
-        return new Function('return ' + expression)();
-    }
+    let calculationToSend= $('#expression').text();
 
-    console.log(calculation($("#expression").text()))
+    console.log(calculationToSend);
 
-    let calculationToSend={
-        expression: $('#expression').text(),
-        answer: $('#answer').text(calculation($("#expression").text()))
-    }
-
-
+    //Sends expression data to the server so it can caculate answer
     $.ajax(
         {
             method: 'POST',
@@ -88,13 +84,16 @@ function addCalculation(event){
 // end addCalculation
 
 function renderToDOM(calculations) {
+    //Takes data from client after the calculations and appends it to DOM
     $('#history-list').empty();
     for (let calculation of calculations) {
+        $('#answer').text(calculation.answer)
         $('#history-list').append(`
              <li>
                 ${calculation.expression} = ${calculation.answer}
             </li>
         `); 
+        console.log(calculation.answer)
 }
 }
 // end renderToDOM

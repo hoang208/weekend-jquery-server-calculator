@@ -11,9 +11,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 const PORT = 5000;
 
 //data
-let calculationList=[
-    {expression: "12/6", answer: "2"}
-];
+let calculationList=[];
 
 //get request
 app.get("/calculation", function (req, res) {
@@ -23,14 +21,25 @@ app.get("/calculation", function (req, res) {
 
 //post request
 app.post("/calculation", (req, res) => {
+    //Grab text in expression
     let newCalculation = req.body.calculationToAdd;
 
-    console.log("new calculation:", newCalculation);
-    console.log("calculationList before:", calculationList);
+    //Calculate answer of expression
+    function calculation(expression) {
+        return new Function('return ' + expression)();
+    }
+    let answerCalculated= calculation(newCalculation)
 
-    calculationList.push(newCalculation);
+    //Create new object that contains expression and answer
+    let expressionCalculation={
+        expression: newCalculation,
+        answer: answerCalculated
+    }
 
-    console.log("calculationList after:", calculationList);
+    //Push information to store in data array
+    calculationList.push(expressionCalculation);
 
     res.sendStatus(201);
 });
+
+app.listen(PORT, () => { console.log("listening on port:", PORT); });
