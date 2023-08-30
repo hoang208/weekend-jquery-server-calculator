@@ -49,12 +49,12 @@ body {
     word-break: break-all;
 }
 
-.output #expression {
-    color: rgba(255,255,255,.75);
-    font-size: 1.5rem;
+.output #current-input {
+    color: rgba(255,255,255);
+    font-size: 2.5rem;
 }
 
-.output #answer {
+.output #previous-input {
     color: rgba(255,255,255);
     font-size: 2.5rem;
 }
@@ -174,3 +174,5 @@ footer {
   footer button:hover {
     background-color: #F5F5DC;
   }
+
+ 

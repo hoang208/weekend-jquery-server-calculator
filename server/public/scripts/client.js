@@ -3,8 +3,8 @@ $(document).ready(onReady);
 function onReady() {
     console.log("Jquery is working")
     getCalculation();
-    $('.number-btn').on('click',addNumberAndOperator)
-    $('.operator-btn').on('click',addNumberAndOperator)
+    $('.number-btn').on('click',addNumber)
+    $('.operator-btn').on('click',currentOperator)
     $('#delete-btn').on('click', deleteOutput)
     $('#clear-btn').on('click', clearOutput)
     $('#equal-btn').on('click', addCalculation);
@@ -12,33 +12,42 @@ function onReady() {
     $('#history-list').on('click',('#table-row'), redoCalculation)
 }
 
+let operand;
 
-function addNumberAndOperator(){
-    //Adds the value of the button to the expression based on conditions
-    if ($("#expression").text() == 0) {
-        $("#expression").text($(this).text());
+function addNumber(){
+    //Adds the value of the button to the current-input based on conditions
+    if ($("#current-input").text() == 0) {
+        $("#current-input").text($(this).text());
     } else {
-        $("#expression").text($("#expression").text() + $(this).text());
+        $("#current-input").text($("#current-input").text() + $(this).text());
     }
     // console.log(typeof($("#output").text()))
 }
 //end addNumberAndOperator
 
+function currentOperator(){
+    $(this).css("backgroundColor", "rgba(255,0,0,.25)");
+    operand=$(this).text();
+    $("#previous-input").text($("#current-input").text());
+    $("#current-input").text("0");
+}
+
 function deleteOutput(){
-    //Deletes last character in the expression string
-    let output= $("#expression").text();
+    //Deletes last character in the current-input string
+    let output= $("#current-input").text();
     if (!(parseInt(parseFloat(output)) == 0 && output.length === 1)) {
-        $("#expression").text(output.slice(0, output.length-1))
+        $("#current-input").text(output.slice(0, output.length-1))
     } if (output.length === 1) {
-        $("#expression").text("0")
+        $("#current-input").text("0")
     }
 }
 //end deleteOutput
 
 function clearOutput(){
     //Clears output
-    $("#expression").text("0");
-    $("#answer").text("0");
+    $("#current-input").text("0");
+    $("#previous-input").text("0");
+    $('.operator-btn').css("backgroundColor", "rgba(255,255,255)")
 }
 //end clearOutput
 
@@ -61,18 +70,25 @@ function getCalculation(){
 function addCalculation(event){
     event.preventDefault();
 
-    let calculationToSend= $('#expression').text();
+    $('.operator-btn').css("backgroundColor", "rgba(255,255,255)")
+    
+    let currentInput= $('#current-input').text();
+    let previousInput = $('#previous-input').text()
+
+    let calculationToSend= {
+        currentInput: currentInput,
+        previousInput: previousInput,
+        operand: operand
+    };
 
     console.log(calculationToSend);
 
-    //Sends expression data to the server so it can caculate answer
+    //Sends current-input data to the server so it can caculate previous-input
     $.ajax(
         {
             method: 'POST',
             url: '/calculation',
-            data: {
-                calculationToAdd: calculationToSend
-            }
+            data: calculationToSend
         } 
     ).then((res) => {
             console.log('Success', res);
@@ -81,7 +97,7 @@ function addCalculation(event){
         }
     ).catch((err) => {
             console.log('Error:', err);
-            alert(`Request failed because of invalid expression. Please enter a valid expression that can be correctly calculated.`);
+            alert(`Request failed because of invalid current-input. Please enter a valid current-input that can be correctly calculated.`);
         }
     );
 };
@@ -91,14 +107,14 @@ function renderToDOM(calculations) {
     //Takes data from client after the calculations and appends it to DOM
     $('#history-list').empty();
     for (let calculation of calculations) {
-        $('#answer').text(calculation.answer)
+        $("#previous-input").text(calculation.answer);
+        $("#current-input").text("0");
         $('#history-list').append(`
              <tr id="table-row">
-                <td><span id="history-td">${calculation.expression}</span> = ${calculation.answer}</td>
+                <td><span id="previous-td">${calculation.previousInput}</span><span id="operand-td">${calculation.operand}</span><span id="current-td">${calculation.currentInput}</span> = ${calculation.answer}</td>
                 <td><button class="redo-btn">Calculate</button></td>
             </tr>
         `); 
-        console.log(calculation.answer)
 }
 }
 // end renderToDOM
@@ -124,8 +140,8 @@ function resetPage() {
 
   function refreshData() {
     //refresh data to empty array as result of request for delete
-    $("#expression").text("0");
-    $("#answer").text("0");
+    $("#current-input").text("0");
+    $("#previous-input").text("0");
     //Receives data from server (empty data) and reflects on DOM
     $.ajax({
       method: 'GET',
@@ -145,20 +161,23 @@ function resetPage() {
 
   function redoCalculation(event) {
     event.preventDefault();
-    //Grabs expression from table data and sends it to server to do calculations again
+    //Grabs values from table data
     console.log("redo is working")
-    let calculationToSend= $(this).find('#history-td').text();
-    console.log("Calculated to send:",calculationToSend)
-    //Change values of expression to match the redo calculation
-    $("#expression").text(calculationToSend);
+    let currentInput= $(this).find('#current-td').text();
+    let previousInput= $(this).find('#previous-td').text();
+    let operand= $(this).find('#operand-td').text();
+    //Send values to recalculate
+    let calculationToSend= {
+        currentInput: currentInput,
+        previousInput: previousInput,
+        operand: operand
+    };
     //Send data for calculation which in response will get data back and update DOM
     $.ajax(
         {
             method: 'POST',
             url: '/calculation',
-            data: {
-                calculationToAdd: calculationToSend
-            }
+            data: calculationToSend
         } 
     ).then((res) => {
             console.log('Success', res);
@@ -167,7 +186,7 @@ function resetPage() {
         }
     ).catch((err) => {
             console.log('Error:', err);
-            alert(`Request failed because of invalid expression. Please enter a valid expression that can be correctly calculated.`);
+            alert(`Request failed because of invalid current-input. Please enter a valid current-input that can be correctly calculated.`);
         }
     );
   };
