@@ -4,7 +4,9 @@
 
 _Duration: 18 hour Sprint_
 
-Over the course of a weekend, the goal was to create a functional web based application. The web based application allow users to use a calculator and keep track of their calculation history
+Over the course of a weekend, the goal was to create a functional web based application. The web based application allow users to use a calculator and keep track of their calculation history.
+
+[Webapp Link](https://immense-ravine-14278-0e83dff62307.herokuapp.com/)
 
 ## Screen Shots
 GIF showing application features:
